@@ -1,0 +1,8 @@
+{
+  "name": "Rohan Shrestha Portfolio",
+  "description": "A clean, data-driven portfolio for Rohan Shrestha, featuring advanced analytics projects and professional experience.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
