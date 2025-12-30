@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -8,7 +7,7 @@ import Projects from './pages/Projects';
 import Experience from './pages/Experience';
 import Blog from './pages/Blog';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Router>
       <div className="min-h-screen flex flex-col">

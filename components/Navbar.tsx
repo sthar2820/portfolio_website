@@ -1,8 +1,7 @@
 
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const location = useLocation();
   
   const navLinks = [
