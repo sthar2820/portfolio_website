@@ -16,23 +16,25 @@ const Blog: React.FC = () => {
       <div className="space-y-24">
         {BLOG_POSTS.map(post => (
           <article key={post.id} className="group">
-            <div className="mb-6 overflow-hidden rounded-2xl shadow-lg aspect-video">
-              {post.mediaType === 'image' ? (
-                <img 
-                  src={post.mediaUrl} 
-                  alt={post.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              ) : (
-                <video 
-                  controls 
-                  className="w-full h-full object-cover"
-                >
-                  <source src={post.mediaUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </div>
+            {post.mediaUrl && (
+              <div className="mb-6 overflow-hidden rounded-2xl shadow-lg aspect-video">
+                {post.mediaType === 'image' ? (
+                  <img
+                    src={post.mediaUrl}
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <video
+                    controls
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={post.mediaUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
+            )}
             <div className="max-w-2xl mx-auto">
               <span className="text-sm font-medium text-slate-400 block mb-2">{post.date}</span>
               <h2 className="serif-title text-2xl mb-4 text-slate-900">{post.title}</h2>

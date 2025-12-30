@@ -1,4 +1,9 @@
 
+export interface ProjectMedia {
+  type: 'image' | 'video';
+  url: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -8,6 +13,10 @@ export interface Project {
   impact: string;
   imageUrl: string;
   isPrimary?: boolean;
+  githubUrl?: string;
+  websiteUrl?: string;
+  details?: string[];
+  media?: ProjectMedia[];
 }
 
 export interface Experience {
@@ -23,6 +32,6 @@ export interface BlogPost {
   title: string;
   date: string;
   content: string;
-  mediaType: 'image' | 'video';
-  mediaUrl: string;
+  mediaType?: 'image' | 'video';
+  mediaUrl?: string;
 }

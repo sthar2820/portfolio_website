@@ -9,8 +9,18 @@ export const PROJECTS: Project[] = [
     technologies: ['Python', 'ETL', 'Streamlit', 'Data Validation'],
     role: 'Lead Developer',
     impact: 'Delivered end-to-end transparent workflows and automated data quality issue identification.',
-    imageUrl: 'https://images.unsplash.com/photo-1551288049-bbda3ef66851?auto=format&fit=crop&q=80&w=800',
-    isPrimary: true
+    imageUrl: '/input/agentic_ss.png',
+    isPrimary: true,
+    githubUrl: 'https://github.com/sthar2820/Agentic_data_pipeline',
+    websiteUrl: 'https://agenticdatapipeline-3xzk7rjrbdyexemhqmdqge.streamlit.app/',
+    details: [
+      'Built a fully automated data pipeline using Python and Streamlit for real-time data processing',
+      'Implemented AI-powered data validation using Gemini API for intelligent quality checks',
+      'Created interactive visualizations for data exploration and anomaly detection',
+      'Designed modular ETL architecture supporting multiple data sources and formats',
+      'Integrated automated reporting with email notifications for stakeholders',
+      'Achieved 95% reduction in manual data processing time'
+    ]
   },
   {
     id: 'p2',
@@ -19,25 +29,36 @@ export const PROJECTS: Project[] = [
     technologies: ['Python', 'LSTM', 'Streamlit', 'Scikit-Learn'],
     role: 'Data Scientist',
     impact: 'Achieved high accuracy evaluated via RMSE/MAE, providing actionable data-driven decision support.',
-    imageUrl: 'https://images.unsplash.com/photo-1611974715853-288ee155460f?auto=format&fit=crop&q=80&w=800'
+    imageUrl: '/input/stock_prediction.png',
+    githubUrl: 'https://github.com/sthar2820/Stock_Prediction_model',
+    websiteUrl: 'https://stockpredictivemodel.streamlit.app/',
+    details: [
+      'Built an LSTM-based deep learning model for stock price forecasting',
+      'Integrated real-time stock data fetching using yfinance API',
+      'Created interactive Streamlit dashboard for visualizing predictions and trends',
+      'Implemented model evaluation using RMSE and MAE metrics for accuracy assessment',
+      'Supports forecasting for 100+ stock tickers with customizable prediction windows',
+      'Visualizes historical data alongside predicted values for easy comparison'
+    ]
   },
-  {
+    {
     id: 'p3',
-    title: 'Manufacturing BI Transformation',
-    description: 'Replaced manual Excel trackers with interactive Power BI dashboards for executive-level leadership reporting.',
-    technologies: ['Power BI', 'Power Query', 'Power Automate'],
-    role: 'BI Intern',
-    impact: 'Improved transparency and eliminated 20+ hours of manual effort per month.',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'p4',
-    title: 'Healthcare Analytics System',
-    description: 'Analyzed 500+ patient records to build SQL-based reports and dashboards for health camp initiatives.',
-    technologies: ['SQL', 'Power BI', 'Data Analysis'],
-    role: 'Data Analyst Intern',
-    impact: 'Reduced manual data entry time by 40% and improved accessibility for decision-makers.',
-    imageUrl: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800'
+    title: 'SMITCH Auto-Extractor',
+    description: 'Python automation tool that monitors Excel files and extracts structured data from complicated templates, solving data duplication and mismanagement issues for Power BI integration.',
+    technologies: ['Python', 'Excel Automation', 'Data Cleaning', 'Windows Services'],
+    role: 'Automation Developer',
+    impact: 'Eliminated manual data extraction and resolved data quality issues including duplication and mismanagement.',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
+    githubUrl: 'https://github.com/sthar2820/smitch_automated',
+    details: [
+      'Built file monitoring system that watches for modifications to .xlsx and .xlsm files',
+      'Implemented automatic extraction of S.M.I.T.C.H. metrics, APW, and EBIT data upon file save',
+      'Created 15-second cooldown mechanism to prevent duplicate processing of the same file',
+      'Deployed as Windows service on company servers for continuous automated monitoring',
+      'Connected to centralized SharePoint data sources for enterprise-wide data access',
+      'Maintained comprehensive logging system for troubleshooting and performance tracking',
+      'Enabled seamless Power BI integration through structured data output'
+    ]
   },
   {
     id: 'p5',
@@ -46,7 +67,19 @@ export const PROJECTS: Project[] = [
     technologies: ['Excel', 'Process Mapping', 'Root Cause Analysis'],
     role: 'Special Projects Intern',
     impact: 'Identified label mismanagement as a root cause and implemented corrective reporting actions.',
-    imageUrl: 'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&q=80&w=800'
+    imageUrl: '/input/IMG_4137.jpg',
+    details: [
+      'Performed physical inventory counts and cross-referenced with system records',
+      'Documented manufacturing workflows and identified process gaps',
+      'Conducted root cause analysis on inventory discrepancies',
+      'Created process maps to visualize workflow bottlenecks',
+      'Presented findings and recommendations to management team'
+    ],
+    media: [
+      { type: 'image', url: '/input/IMG_4137.jpg' },
+      { type: 'image', url: '/input/IMG_4185.JPG' },
+      { type: 'video', url: '/input/copy_3A8F3978-52D6-4244-AA6F-D261FDBFF5FB.mov' }
+    ]
   }
 ];
 
@@ -89,18 +122,14 @@ export const EXPERIENCES: Experience[] = [
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'b1',
-    title: 'The Balance Between Logic and Creativity',
-    date: 'Oct 2025',
-    content: 'Studying Computer Science at ULM has taught me the precision of logic, but my work in Data Analytics shows me the beauty of patterns. I find that my best insights come when I step away from the screen.',
-    mediaType: 'image',
-    mediaUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800'
+    title: 'Soccer - A Lifelong Passion',
+    date: 'Dec 2025',
+    content: 'I\'ve been playing soccer ever since I was a kid. The sport has taught me teamwork, discipline, and the importance of staying active. Whether it\'s a casual game with friends or a competitive match, soccer has always been my go-to way to unwind and stay connected with others.'
   },
   {
     id: 'b2',
-    title: 'A Glimpse into Campus Life',
-    date: 'Aug 2025',
-    content: 'Serving as the Vice-President of the NSA on campus has been an incredible experience in leadership and community building. Here is a small highlight from our recent event.',
-    mediaType: 'video',
-    mediaUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
+    title: 'Finding Peace Through Music',
+    date: 'Dec 2025',
+    content: 'Playing guitar is my stress reliever. After long hours of coding or data analysis, picking up my guitar helps me decompress and find balance. Music offers a different kind of creativity - one that complements the logical thinking required in my technical work.'
   }
 ];
