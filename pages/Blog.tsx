@@ -1,8 +1,7 @@
 
-import React from 'react';
 import { BLOG_POSTS } from '../constants';
 
-const Blog: React.FC = () => {
+const Blog = () => {
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <div className="mb-16 text-center">

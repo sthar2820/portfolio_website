@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 
-const Projects: React.FC = () => {
+const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const primaryProject = PROJECTS.find(p => p.isPrimary);
   const otherProjects = PROJECTS.filter(p => !p.isPrimary);
