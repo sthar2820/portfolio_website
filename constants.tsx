@@ -24,6 +24,27 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'p2',
+    title: 'Hospital Readmissions Risk Pipeline',
+    description: 'A data pipeline that merges CMS Hospital Readmissions data with CDC Social Vulnerability Index (SVI) to analyze readmission risk across socioeconomic factors.',
+    technologies: ['Python', 'Pandas', 'Parquet', 'Power BI', 'GitHub Actions'],
+    role: 'Data Engineer',
+    impact: 'Enabled healthcare analytics by linking hospital performance metrics with community vulnerability indicators for risk stratification.',
+    imageUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800',
+    githubUrl: 'https://github.com/sthar2820/hospital-readmissions-pipeline',
+    details: [
+      'Ingested CMS Hospital Readmissions Reduction Program (HRRP) data and CDC SVI data',
+      'Cleaned and normalized facility IDs, ZIP codes, and numeric fields',
+      'Merged hospital performance metrics with community vulnerability indicators',
+      'Engineered risk features including 2×2 risk buckets (High/Low SVI × High/Low ERR)',
+      'Created 4-category risk classification: High SVI + High ERR (highest risk) to Low SVI + Low ERR (lowest risk)',
+      'Exported Power BI-ready datasets with 37 columns and auto-generated data dictionary',
+      'Implemented CI/CD automation with GitHub Actions for pipeline runs',
+      '🚧 Upcoming: Power BI visualization dashboard for interactive risk analysis'
+    ]
+    
+  },
+  {
+    id: 'p3',
     title: 'ML Stock Prediction Dashboard',
     description: 'Interactive stock analysis dashboard integrating an LSTM (Long Short-Term Memory) model to forecast trends for 100+ stock prices.',
     technologies: ['Python', 'LSTM', 'Streamlit', 'Scikit-Learn'],
@@ -41,8 +62,8 @@ export const PROJECTS: Project[] = [
       'Visualizes historical data alongside predicted values for easy comparison'
     ]
   },
-    {
-    id: 'p3',
+  {
+    id: 'p4',
     title: 'SMITCH Auto-Extractor',
     description: 'Python automation tool that monitors Excel files and extracts structured data from complicated templates, solving data duplication and mismanagement issues for Power BI integration.',
     technologies: ['Python', 'Excel Automation', 'Data Cleaning', 'Windows Services'],
@@ -61,7 +82,7 @@ export const PROJECTS: Project[] = [
     ]
   },
   {
-    id: 'p5',
+    id: 'p6',
     title: 'Inventory Audit & Root Cause Analysis',
     description: 'Conducted a deep-dive manufacturing audit to investigate inventory discrepancies and document workflows.',
     technologies: ['Excel', 'Process Mapping', 'Root Cause Analysis'],
