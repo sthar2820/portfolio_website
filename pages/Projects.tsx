@@ -2,11 +2,25 @@
 import { useState } from 'react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
+import { trackProjectView, trackExternalLink } from '../utils/analytics';
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const primaryProject = PROJECTS.find(p => p.isPrimary);
   const otherProjects = PROJECTS.filter(p => !p.isPrimary);
+
+  const handleProjectDetails = (project: Project) => {
+    trackProjectView(project.id, project.title);
+    setSelectedProject(project);
+  };
+
+  const handleLiveDemo = (url: string, projectTitle: string) => {
+    trackExternalLink('live_demo', url, projectTitle);
+  };
+
+  const handleGithub = (url: string, projectTitle: string) => {
+    trackExternalLink('project_github', url, projectTitle);
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
@@ -44,17 +58,17 @@ const Projects = () => {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {primaryProject.websiteUrl && (
-                      <a href={primaryProject.websiteUrl} target="_blank" rel="noopener noreferrer" className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-indigo-700 transition-all">
+                      <a href={primaryProject.websiteUrl} target="_blank" rel="noopener noreferrer" onClick={() => handleLiveDemo(primaryProject.websiteUrl!, primaryProject.title)} className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-indigo-700 transition-all">
                         Live Demo
                       </a>
                     )}
                     {primaryProject.githubUrl && (
-                      <a href={primaryProject.githubUrl} target="_blank" rel="noopener noreferrer" className="border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
+                      <a href={primaryProject.githubUrl} target="_blank" rel="noopener noreferrer" onClick={() => handleGithub(primaryProject.githubUrl!, primaryProject.title)} className="border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
                         GitHub
                       </a>
                     )}
                     {primaryProject.details && (
-                      <button onClick={() => setSelectedProject(primaryProject)} className="border border-indigo-200 text-indigo-600 px-3 py-1.5 rounded-lg text-xs font-medium hover:border-indigo-400 hover:bg-indigo-50 transition-all">
+                      <button onClick={() => handleProjectDetails(primaryProject)} className="border border-indigo-200 text-indigo-600 px-3 py-1.5 rounded-lg text-xs font-medium hover:border-indigo-400 hover:bg-indigo-50 transition-all">
                         Details
                       </button>
                     )}
@@ -85,17 +99,17 @@ const Projects = () => {
               {(project.githubUrl || project.websiteUrl || project.details) && (
                 <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-slate-100">
                   {project.websiteUrl && (
-                    <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-indigo-700 transition-all">
+                    <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" onClick={() => handleLiveDemo(project.websiteUrl!, project.title)} className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-indigo-700 transition-all">
                       Live Demo
                     </a>
                   )}
                   {project.githubUrl && (
-                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-xs border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" onClick={() => handleGithub(project.githubUrl!, project.title)} className="text-xs border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
                       GitHub
                     </a>
                   )}
                   {project.details && (
-                    <button onClick={() => setSelectedProject(project)} className="text-xs border border-indigo-200 text-indigo-600 px-3 py-1.5 rounded-lg font-medium hover:border-indigo-400 hover:bg-indigo-50 transition-all">
+                    <button onClick={() => handleProjectDetails(project)} className="text-xs border border-indigo-200 text-indigo-600 px-3 py-1.5 rounded-lg font-medium hover:border-indigo-400 hover:bg-indigo-50 transition-all">
                       Details
                     </button>
                   )}
@@ -181,12 +195,12 @@ const Projects = () => {
             </div>
             <div className="p-6 border-t border-slate-100 flex gap-3">
               {selectedProject.websiteUrl && (
-                <a href={selectedProject.websiteUrl} target="_blank" rel="noopener noreferrer" className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all">
+                <a href={selectedProject.websiteUrl} target="_blank" rel="noopener noreferrer" onClick={() => handleLiveDemo(selectedProject.websiteUrl!, selectedProject.title)} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all">
                   Live Demo
                 </a>
               )}
               {selectedProject.githubUrl && (
-                <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
+                <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" onClick={() => handleGithub(selectedProject.githubUrl!, selectedProject.title)} className="border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
                   View on GitHub
                 </a>
               )}

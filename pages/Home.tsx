@@ -1,10 +1,24 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { trackResumeView, trackResumeDownload, trackExternalLink } from '../utils/analytics';
 
 const Home = () => {
   const [showResume, setShowResume] = useState(false);
   const resumePath = '/input/Rohan_Shrestha_Data_Analyst.pdf';
+
+  const handleResumeOpen = () => {
+    trackResumeView();
+    setShowResume(true);
+  };
+
+  const handleResumeDownload = () => {
+    trackResumeDownload();
+  };
+
+  const handleExternalLink = (linkType: 'email' | 'linkedin', url: string) => {
+    trackExternalLink(linkType, url);
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-12 md:py-20">
@@ -31,13 +45,13 @@ const Home = () => {
             I build systems that translate complex datasets into clear, functional insights. My work focuses on creating reliable data pipelines and automated workflows that help teams move from simple observation to informed action.
           </p>
           <div className="flex flex-wrap gap-4">
-            <a href="mailto:sthar2820@gmail.com" className="bg-slate-900 text-white px-8 py-3.5 rounded-lg font-medium hover:bg-slate-800 transition-all active:scale-95">
+            <a href="mailto:sthar2820@gmail.com" onClick={() => handleExternalLink('email', 'mailto:sthar2820@gmail.com')} className="bg-slate-900 text-white px-8 py-3.5 rounded-lg font-medium hover:bg-slate-800 transition-all active:scale-95">
               Contact Me
             </a>
-            <a href="https://www.linkedin.com/in/shrestharo2002/" target="_blank" rel="noopener noreferrer" className="border border-slate-200 text-slate-600 px-8 py-3.5 rounded-lg font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
+            <a href="https://www.linkedin.com/in/shrestharo2002/" target="_blank" rel="noopener noreferrer" onClick={() => handleExternalLink('linkedin', 'https://www.linkedin.com/in/shrestharo2002/')} className="border border-slate-200 text-slate-600 px-8 py-3.5 rounded-lg font-medium hover:border-slate-400 hover:bg-slate-50 transition-all">
               LinkedIn
             </a>
-            <button onClick={() => setShowResume(true)} className="border border-indigo-200 text-indigo-600 px-8 py-3.5 rounded-lg font-medium hover:border-indigo-400 hover:bg-indigo-50 transition-all">
+            <button onClick={handleResumeOpen} className="border border-indigo-200 text-indigo-600 px-8 py-3.5 rounded-lg font-medium hover:border-indigo-400 hover:bg-indigo-50 transition-all">
               Resume
             </button>
           </div>
@@ -135,6 +149,7 @@ const Home = () => {
                 <a
                   href={resumePath}
                   download="Rohan_Shrestha_Resume.pdf"
+                  onClick={handleResumeDownload}
                   className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all"
                 >
                   Download
