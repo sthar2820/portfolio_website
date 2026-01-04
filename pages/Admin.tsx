@@ -255,33 +255,59 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* View in Google Analytics */}
+        {/* User Journey Funnel */}
         <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 rounded-2xl p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">View Real-Time Data</h2>
-          <div className="text-sm text-slate-600 space-y-3">
-            <p>Your tracking is active! Events are being collected for:</p>
-            <ul className="list-disc list-inside space-y-1 text-slate-500">
-              <li>Page views (Home, Projects, Experience, Blog)</li>
-              <li>Resume opens & downloads</li>
-              <li>Project detail views</li>
-              <li>External link clicks (GitHub, LinkedIn, Live Demo)</li>
-            </ul>
-            <div className="pt-4">
-              <a
-                href="https://analytics.google.com/analytics/web/#/p476498908/reports/dashboard?params=_u..nav%3Dmaui"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all"
-              >
-                Open Google Analytics
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </div>
-            <p className="text-xs text-slate-400 mt-3">
-              Go to Reports → Engagement → Events to see all tracked interactions
-            </p>
+          <h2 className="text-lg font-bold text-slate-900 mb-4">User Journey Funnel</h2>
+          <div className="space-y-3">
+            {(() => {
+              const totalPageViews = analytics?.pageViews.reduce((sum, p) => sum + p.views, 0) || 0;
+              const resumeOpens = analytics?.resumeStats.opens || 0;
+              const resumeDownloads = analytics?.resumeStats.downloads || 0;
+              const totalClicks = analytics?.externalClicks.reduce((sum, c) => sum + c.clicks, 0) || 0;
+              const maxValue = Math.max(analytics?.totalVisitors || 0, totalPageViews, 1);
+
+              const funnelSteps = [
+                { label: 'Visitors', value: analytics?.totalVisitors || 0, color: 'bg-indigo-500' },
+                { label: 'Page Views', value: totalPageViews, color: 'bg-blue-500' },
+                { label: 'Resume Opens', value: resumeOpens, color: 'bg-green-500' },
+                { label: 'Resume Downloads', value: resumeDownloads, color: 'bg-emerald-500' },
+                { label: 'External Clicks', value: totalClicks, color: 'bg-amber-500' },
+              ];
+
+              return funnelSteps.map((step, index) => (
+                <div key={step.label} className="relative">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm text-slate-600">{step.label}</span>
+                    <span className="text-sm font-semibold text-slate-900">{step.value}</span>
+                  </div>
+                  <div
+                    className="h-8 bg-slate-100 rounded-lg overflow-hidden"
+                    style={{
+                      marginLeft: `${index * 8}%`,
+                      marginRight: `${index * 8}%`
+                    }}
+                  >
+                    <div
+                      className={`h-full ${step.color} rounded-lg transition-all duration-500`}
+                      style={{ width: `${maxValue > 0 ? (step.value / maxValue) * 100 : 0}%` }}
+                    />
+                  </div>
+                </div>
+              ));
+            })()}
+          </div>
+          <div className="mt-6 pt-4 border-t border-indigo-100">
+            <a
+              href="https://analytics.google.com/analytics/web/#/p476498908/reports/dashboard?params=_u..nav%3Dmaui"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-indigo-600 text-sm font-medium hover:text-indigo-700 transition-all"
+            >
+              View detailed analytics in Google Analytics
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>
