@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { BlogPost } from '../types';
+import { getBlogPosts, saveBlogPost, deleteBlogPost } from '../utils/blogStorage';
+import BlogForm from '../components/BlogForm';
 
 interface AnalyticsData {
   pageViews: { page: string; views: number }[];
@@ -16,6 +19,12 @@ const Admin = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState<'7' | '30' | '90'>('30');
+
+  // Blog management state
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   // Check if already authenticated
   useEffect(() => {
@@ -89,8 +98,38 @@ const Admin = () => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchAnalytics();
+      setBlogPosts(getBlogPosts());
     }
   }, [isAuthenticated, dateRange]);
+
+  // Blog handlers
+  const handleSaveBlog = (post: BlogPost) => {
+    saveBlogPost(post);
+    setBlogPosts(getBlogPosts());
+    setShowBlogForm(false);
+    setEditingPost(null);
+  };
+
+  const handleDeleteBlog = (id: string) => {
+    deleteBlogPost(id);
+    setBlogPosts(getBlogPosts());
+    setDeleteConfirm(null);
+  };
+
+  const handleEditBlog = (post: BlogPost) => {
+    setEditingPost(post);
+    setShowBlogForm(true);
+  };
+
+  const handleNewBlog = () => {
+    setEditingPost(null);
+    setShowBlogForm(true);
+  };
+
+  const handleCancelBlogForm = () => {
+    setShowBlogForm(false);
+    setEditingPost(null);
+  };
 
   if (!isAuthenticated) {
     return (
@@ -311,6 +350,103 @@ const Admin = () => {
           </div>
         </div>
       </div>
+
+      {/* Blog Management Section */}
+      <div className="mt-12 pt-8 border-t border-slate-200">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">Blog Management</h2>
+            <p className="text-slate-500 text-sm mt-1">Create, edit, and delete blog posts</p>
+          </div>
+          <button
+            onClick={handleNewBlog}
+            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            New Post
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {blogPosts.length === 0 ? (
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 text-center">
+              <p className="text-slate-500">No blog posts yet. Create your first post!</p>
+            </div>
+          ) : (
+            blogPosts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-white border border-slate-200 rounded-xl p-5 flex items-center justify-between hover:border-slate-300 transition-all"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3">
+                    {post.mediaUrl && (
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+                        {post.mediaType === 'image' ? (
+                          <img src={post.mediaUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-slate-900 truncate">{post.title}</h3>
+                      <p className="text-sm text-slate-500">{post.date}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <button
+                    onClick={() => handleEditBlog(post)}
+                    className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                  >
+                    Edit
+                  </button>
+                  {deleteConfirm === post.id ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleDeleteBlog(post.id)}
+                        className="px-3 py-1.5 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-all"
+                      >
+                        Confirm
+                      </button>
+                      <button
+                        onClick={() => setDeleteConfirm(null)}
+                        className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setDeleteConfirm(post.id)}
+                      className="px-3 py-1.5 text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Blog Form Modal */}
+      {showBlogForm && (
+        <BlogForm
+          post={editingPost}
+          onSave={handleSaveBlog}
+          onCancel={handleCancelBlogForm}
+        />
+      )}
     </div>
   );
 };

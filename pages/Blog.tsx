@@ -1,7 +1,14 @@
-
-import { BLOG_POSTS } from '../constants';
+import { useState, useEffect } from 'react';
+import { BlogPost } from '../types';
+import { getBlogPosts } from '../utils/blogStorage';
 
 const Blog = () => {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    setPosts(getBlogPosts());
+  }, []);
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <div className="mb-16 text-center">
@@ -13,7 +20,7 @@ const Blog = () => {
       </div>
 
       <div className="space-y-24">
-        {BLOG_POSTS.map(post => (
+        {posts.map(post => (
           <article key={post.id} className="group">
             {post.mediaUrl && (
               <div className="mb-6 overflow-hidden rounded-2xl shadow-lg aspect-video">
