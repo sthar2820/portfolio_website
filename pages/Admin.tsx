@@ -255,18 +255,33 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Setup Instructions */}
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">Setup Required</h2>
+        {/* View in Google Analytics */}
+        <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 rounded-2xl p-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-4">View Real-Time Data</h2>
           <div className="text-sm text-slate-600 space-y-3">
-            <p>To see real analytics data:</p>
-            <ol className="list-decimal list-inside space-y-2">
-              <li>Create a GA4 property at <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">analytics.google.com</a></li>
-              <li>Get your Measurement ID (G-XXXXXXXXXX)</li>
-              <li>Update <code className="bg-slate-200 px-1 rounded">index.html</code> and <code className="bg-slate-200 px-1 rounded">utils/analytics.ts</code></li>
-              <li>Set up the Vercel serverless function with GA4 API credentials</li>
-            </ol>
-            <p className="text-slate-500 mt-4">Currently showing placeholder data.</p>
+            <p>Your tracking is active! Events are being collected for:</p>
+            <ul className="list-disc list-inside space-y-1 text-slate-500">
+              <li>Page views (Home, Projects, Experience, Blog)</li>
+              <li>Resume opens & downloads</li>
+              <li>Project detail views</li>
+              <li>External link clicks (GitHub, LinkedIn, Live Demo)</li>
+            </ul>
+            <div className="pt-4">
+              <a
+                href="https://analytics.google.com/analytics/web/#/p476498908/reports/dashboard?params=_u..nav%3Dmaui"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all"
+              >
+                Open Google Analytics
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </div>
+            <p className="text-xs text-slate-400 mt-3">
+              Go to Reports → Engagement → Events to see all tracked interactions
+            </p>
           </div>
         </div>
       </div>
