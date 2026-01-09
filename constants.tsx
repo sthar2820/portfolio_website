@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'p4',
-    title: 'SMITCH Auto-Extractor',
+    title: 'Excel Template Auto-Extractor',
     description: 'Python automation tool that monitors Excel files and extracts structured data from complicated templates, solving data duplication and mismanagement issues for Power BI integration.',
     technologies: ['Python', 'Excel Automation', 'Data Cleaning', 'Windows Services'],
     role: 'Automation Developer',
@@ -73,7 +73,7 @@ export const PROJECTS: Project[] = [
     githubUrl: 'https://github.com/sthar2820/smitch_automated',
     details: [
       'Built file monitoring system that watches for modifications to .xlsx and .xlsm files',
-      'Implemented automatic extraction of S.M.I.T.C.H. metrics, APW, and EBIT data upon file save',
+      'Implemented automatic extraction of KPI metrics, APW, and EBIT data upon file save',
       'Created 15-second cooldown mechanism to prevent duplicate processing of the same file',
       'Deployed as Windows service on company servers for continuous automated monitoring',
       'Connected to centralized SharePoint data sources for enterprise-wide data access',

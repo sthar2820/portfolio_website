@@ -206,14 +206,42 @@ async function fetchGA4Data(
   const usersData = await usersResponse.json();
   console.log('GA4 users response:', JSON.stringify(usersData));
 
+  // Fetch project views with project title dimension
+  const projectViewsResponse = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: 'customEvent:project_title' }],
+        metrics: [{ name: 'eventCount' }],
+        dimensionFilter: {
+          filter: {
+            fieldName: 'eventName',
+            stringFilter: {
+              value: 'project_viewed',
+            },
+          },
+        },
+      }),
+    }
+  );
+  const projectViewsData = await projectViewsResponse.json();
+  console.log('GA4 project views response:', JSON.stringify(projectViewsData));
+
   // Process the data
-  return processGA4Data(pageViewsData, eventsData, usersData);
+  return processGA4Data(pageViewsData, eventsData, usersData, projectViewsData);
 }
 
 function processGA4Data(
   pageViewsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
   eventsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
-  usersData: { rows?: { metricValues: { value: string }[] }[] }
+  usersData: { rows?: { metricValues: { value: string }[] }[] },
+  projectViewsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] }
 ): AnalyticsData {
   // Log raw data for debugging
   console.log('Raw pageViewsData rows:', JSON.stringify(pageViewsData.rows?.slice(0, 5)));
@@ -265,9 +293,12 @@ function processGA4Data(
     downloads: events['resume_downloaded'] || 0,
   };
 
-  const projectViews = [
-    { title: 'Automated Analytics Data Pipeline', views: events['project_viewed'] || 0 },
-  ];
+  // Process project views from dedicated query
+  console.log('Raw projectViewsData rows:', JSON.stringify(projectViewsData.rows));
+  const projectViews = (projectViewsData.rows || []).map((row) => ({
+    title: row.dimensionValues[0].value,
+    views: parseInt(row.metricValues[0].value),
+  }));
 
   // Check for external_link_click event with different naming conventions
   const externalClicks = [
