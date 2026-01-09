@@ -37,22 +37,33 @@ export default async function handler(
   const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
+  console.log('Environment check:', {
+    hasPropertyId: !!propertyId,
+    hasServiceEmail: !!serviceAccountEmail,
+    hasPrivateKey: !!privateKey,
+    privateKeyLength: privateKey?.length || 0,
+  });
+
   if (!propertyId || !serviceAccountEmail || !privateKey) {
-    // Return mock data if not configured
-    return res.status(200).json(getMockData());
+    console.log('Missing credentials, returning mock data');
+    return res.status(200).json({ ...getMockData(), debug: 'missing_credentials' });
   }
 
   try {
     // Get access token using service account
+    console.log('Getting access token...');
     const accessToken = await getAccessToken(serviceAccountEmail, privateKey);
+    console.log('Access token obtained:', accessToken ? 'yes' : 'no', 'length:', accessToken?.length);
 
     // Fetch analytics data from GA4
+    console.log('Fetching GA4 data for property:', propertyId);
     const analyticsData = await fetchGA4Data(propertyId, accessToken, days);
 
     return res.status(200).json(analyticsData);
   } catch (error) {
     console.error('Analytics API error:', error);
-    return res.status(200).json(getMockData());
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return res.status(200).json({ ...getMockData(), debug: 'error', errorMessage });
   }
 }
 
