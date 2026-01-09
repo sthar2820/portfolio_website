@@ -167,6 +167,7 @@ async function fetchGA4Data(
     }
   );
   const pageViewsData = await pageViewsResponse.json();
+  console.log('GA4 pageViews response:', JSON.stringify(pageViewsData));
 
   // Fetch events (resume, project views, external clicks)
   const eventsResponse = await fetch(
@@ -185,6 +186,7 @@ async function fetchGA4Data(
     }
   );
   const eventsData = await eventsResponse.json();
+  console.log('GA4 events response:', JSON.stringify(eventsData));
 
   // Fetch total users
   const usersResponse = await fetch(
@@ -202,6 +204,7 @@ async function fetchGA4Data(
     }
   );
   const usersData = await usersResponse.json();
+  console.log('GA4 users response:', JSON.stringify(usersData));
 
   // Process the data
   return processGA4Data(pageViewsData, eventsData, usersData);
