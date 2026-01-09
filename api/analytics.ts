@@ -201,14 +201,39 @@ function processGA4Data(
   eventsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
   usersData: { rows?: { metricValues: { value: string }[] }[] }
 ): AnalyticsData {
-  // Process page views
-  const pageViews = (pageViewsData.rows || [])
-    .map((row) => ({
-      page: row.dimensionValues[0].value,
-      views: parseInt(row.metricValues[0].value),
-    }))
-    .filter((p) => ['Home', 'Projects', 'Experience', 'Blog'].some((name) => p.page.includes(name)))
-    .slice(0, 4);
+  // Log raw data for debugging
+  console.log('Raw pageViewsData rows:', JSON.stringify(pageViewsData.rows?.slice(0, 5)));
+  console.log('Raw eventsData rows:', JSON.stringify(eventsData.rows?.slice(0, 10)));
+  console.log('Raw usersData rows:', JSON.stringify(usersData.rows));
+
+  // Process all page views and group by simplified page name
+  const allPageViews = (pageViewsData.rows || []).map((row) => ({
+    page: row.dimensionValues[0].value,
+    views: parseInt(row.metricValues[0].value),
+  }));
+
+  // Map page titles to simplified names
+  let homeViews = 0, projectsViews = 0, experienceViews = 0, blogViews = 0;
+
+  for (const pv of allPageViews) {
+    const title = pv.page.toLowerCase();
+    if (title.includes('home') || title === 'rohan shrestha' || title === '/' || !title.includes('|')) {
+      homeViews += pv.views;
+    } else if (title.includes('project')) {
+      projectsViews += pv.views;
+    } else if (title.includes('experience')) {
+      experienceViews += pv.views;
+    } else if (title.includes('blog')) {
+      blogViews += pv.views;
+    }
+  }
+
+  const pageViews = [
+    { page: 'Home', views: homeViews },
+    { page: 'Projects', views: projectsViews },
+    { page: 'Experience', views: experienceViews },
+    { page: 'Blog', views: blogViews },
+  ];
 
   // Process events
   const events = (eventsData.rows || []).reduce(
@@ -219,6 +244,8 @@ function processGA4Data(
     {} as Record<string, number>
   );
 
+  console.log('Processed events:', JSON.stringify(events));
+
   const resumeStats = {
     opens: events['resume_opened'] || 0,
     downloads: events['resume_downloaded'] || 0,
@@ -228,16 +255,19 @@ function processGA4Data(
     { title: 'Automated Analytics Data Pipeline', views: events['project_viewed'] || 0 },
   ];
 
+  // Check for external_link_click event with different naming conventions
   const externalClicks = [
-    { type: 'LinkedIn', clicks: events['linkedin'] || 0 },
-    { type: 'GitHub', clicks: events['github'] || 0 },
-    { type: 'Email', clicks: events['email'] || 0 },
-    { type: 'Live Demo', clicks: events['live_demo'] || 0 },
+    { type: 'LinkedIn', clicks: events['external_link_click_linkedin'] || events['linkedin'] || 0 },
+    { type: 'GitHub', clicks: events['external_link_click_github'] || events['github'] || 0 },
+    { type: 'Email', clicks: events['external_link_click_email'] || events['email'] || 0 },
+    { type: 'Live Demo', clicks: events['external_link_click_live_demo'] || events['live_demo'] || 0 },
   ];
 
   const totalVisitors = usersData.rows?.[0]?.metricValues?.[0]?.value
     ? parseInt(usersData.rows[0].metricValues[0].value)
     : 0;
+
+  console.log('Final processed data:', JSON.stringify({ pageViews, totalVisitors, resumeStats }));
 
   return {
     pageViews,
