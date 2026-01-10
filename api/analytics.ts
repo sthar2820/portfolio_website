@@ -17,6 +17,11 @@ interface AnalyticsData {
   resumeStats: { opens: number; downloads: number };
   projectViews: { title: string; views: number }[];
   externalClicks: { type: string; clicks: number }[];
+  demographics: {
+    countries: { country: string; users: number }[];
+    cities: { city: string; users: number }[];
+    devices: { device: string; users: number }[];
+  };
   totalVisitors: number;
   lastUpdated: string;
 }
@@ -233,15 +238,74 @@ async function fetchGA4Data(
   const projectViewsData = await projectViewsResponse.json();
   console.log('GA4 project views response:', JSON.stringify(projectViewsData));
 
+  // Fetch demographics - countries
+  const countriesResponse = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: 'country' }],
+        metrics: [{ name: 'totalUsers' }],
+        limit: 10,
+      }),
+    }
+  );
+  const countriesData = await countriesResponse.json();
+
+  // Fetch demographics - cities
+  const citiesResponse = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: 'city' }],
+        metrics: [{ name: 'totalUsers' }],
+        limit: 10,
+      }),
+    }
+  );
+  const citiesData = await citiesResponse.json();
+
+  // Fetch demographics - devices
+  const devicesResponse = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: 'deviceCategory' }],
+        metrics: [{ name: 'totalUsers' }],
+      }),
+    }
+  );
+  const devicesData = await devicesResponse.json();
+
   // Process the data
-  return processGA4Data(pageViewsData, eventsData, usersData, projectViewsData);
+  return processGA4Data(pageViewsData, eventsData, usersData, projectViewsData, countriesData, citiesData, devicesData);
 }
 
 function processGA4Data(
   pageViewsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
   eventsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
   usersData: { rows?: { metricValues: { value: string }[] }[] },
-  projectViewsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] }
+  projectViewsData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
+  countriesData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
+  citiesData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] },
+  devicesData: { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] }
 ): AnalyticsData {
   // Log raw data for debugging
   console.log('Raw pageViewsData rows:', JSON.stringify(pageViewsData.rows?.slice(0, 5)));
@@ -312,6 +376,24 @@ function processGA4Data(
     ? parseInt(usersData.rows[0].metricValues[0].value)
     : 0;
 
+  // Process demographics
+  const countries = (countriesData.rows || []).map((row) => ({
+    country: row.dimensionValues[0].value,
+    users: parseInt(row.metricValues[0].value),
+  }));
+
+  const cities = (citiesData.rows || [])
+    .map((row) => ({
+      city: row.dimensionValues[0].value,
+      users: parseInt(row.metricValues[0].value),
+    }))
+    .filter((c) => c.city !== '(not set)');
+
+  const devices = (devicesData.rows || []).map((row) => ({
+    device: row.dimensionValues[0].value,
+    users: parseInt(row.metricValues[0].value),
+  }));
+
   console.log('Final processed data:', JSON.stringify({ pageViews, totalVisitors, resumeStats }));
 
   return {
@@ -319,6 +401,11 @@ function processGA4Data(
     resumeStats,
     projectViews,
     externalClicks,
+    demographics: {
+      countries,
+      cities,
+      devices,
+    },
     totalVisitors,
     lastUpdated: new Date().toISOString(),
   };
@@ -344,6 +431,11 @@ function getMockData(): AnalyticsData {
       { type: 'Email', clicks: 0 },
       { type: 'Live Demo', clicks: 0 },
     ],
+    demographics: {
+      countries: [],
+      cities: [],
+      devices: [],
+    },
     totalVisitors: 0,
     lastUpdated: new Date().toISOString(),
   };

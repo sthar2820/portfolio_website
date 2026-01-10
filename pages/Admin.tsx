@@ -8,6 +8,11 @@ interface AnalyticsData {
   resumeStats: { opens: number; downloads: number };
   projectViews: { title: string; views: number }[];
   externalClicks: { type: string; clicks: number }[];
+  demographics: {
+    countries: { country: string; users: number }[];
+    cities: { city: string; users: number }[];
+    devices: { device: string; users: number }[];
+  };
   totalVisitors: number;
   lastUpdated: string;
 }
@@ -91,6 +96,11 @@ const Admin = () => {
       { type: 'Email', clicks: 0 },
       { type: 'Live Demo', clicks: 0 },
     ],
+    demographics: {
+      countries: [],
+      cities: [],
+      devices: [],
+    },
     totalVisitors: 0,
     lastUpdated: new Date().toISOString(),
   });
@@ -294,6 +304,64 @@ const Admin = () => {
           </div>
         </div>
 
+        {/* Demographics - Countries */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-4">Top Countries</h2>
+          <div className="space-y-3">
+            {analytics?.demographics.countries.length === 0 ? (
+              <p className="text-slate-400 text-sm">No data available</p>
+            ) : (
+              analytics?.demographics.countries.slice(0, 5).map((item) => (
+                <div key={item.country} className="flex items-center justify-between">
+                  <span className="text-slate-600">{item.country}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-violet-500 rounded-full"
+                        style={{
+                          width: `${analytics.demographics.countries.length > 0
+                            ? (item.users / Math.max(...analytics.demographics.countries.map(c => c.users), 1)) * 100
+                            : 0}%`
+                        }}
+                      />
+                    </div>
+                    <span className="text-sm font-semibold text-slate-900 w-12 text-right">{item.users}</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Demographics - Devices */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-4">Devices</h2>
+          <div className="space-y-3">
+            {analytics?.demographics.devices.length === 0 ? (
+              <p className="text-slate-400 text-sm">No data available</p>
+            ) : (
+              analytics?.demographics.devices.map((item) => (
+                <div key={item.device} className="flex items-center justify-between">
+                  <span className="text-slate-600 capitalize">{item.device}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-cyan-500 rounded-full"
+                        style={{
+                          width: `${analytics.demographics.devices.length > 0
+                            ? (item.users / Math.max(...analytics.demographics.devices.map(d => d.users), 1)) * 100
+                            : 0}%`
+                        }}
+                      />
+                    </div>
+                    <span className="text-sm font-semibold text-slate-900 w-12 text-right">{item.users}</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
         {/* User Journey Funnel */}
         <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 rounded-2xl p-6">
           <h2 className="text-lg font-bold text-slate-900 mb-4">User Journey Funnel</h2>
@@ -350,6 +418,21 @@ const Admin = () => {
           </div>
         </div>
       </div>
+
+      {/* Top Cities - Full Width */}
+      {analytics?.demographics.cities && analytics.demographics.cities.length > 0 && (
+        <div className="mt-8 bg-white border border-slate-200 rounded-2xl p-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-4">Top Cities</h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {analytics.demographics.cities.slice(0, 10).map((item) => (
+              <div key={item.city} className="text-center p-3 bg-slate-50 rounded-lg">
+                <p className="text-2xl font-bold text-slate-900">{item.users}</p>
+                <p className="text-sm text-slate-500 truncate">{item.city}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Blog Management Section */}
       <div className="mt-12 pt-8 border-t border-slate-200">
