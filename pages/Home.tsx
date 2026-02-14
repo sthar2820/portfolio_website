@@ -5,7 +5,7 @@ import { trackResumeView, trackResumeDownload, trackExternalLink } from '../util
 
 const Home = () => {
   const [showResume, setShowResume] = useState(false);
-  const resumePath = '/input/Rohan_Shrestha__Resume.pdf';
+  const resumePath = '/input/Rohan_Shrestha_Resume_DA.pdf';
 
   const handleResumeOpen = () => {
     trackResumeView();
